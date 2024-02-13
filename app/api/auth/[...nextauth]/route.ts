@@ -6,6 +6,18 @@ import { db } from "@/lib/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      role: string;
+      image: string;
+      name: string;
+    };
+  }
+}
+
 const handler = NextAuth({
   adapter: PrismaAdapter(db),
   providers: [
@@ -62,9 +74,9 @@ const handler = NextAuth({
     session: async ({ session, token }) => {
       if (token.sub && session.user) {
         session.user.id = token.sub;
-        session.user.role = token.role;
-        session.user.image = token.image || null;
-        session.user.name = token.name;
+        session.user.role = token.role as string;
+        session.user.image = token.image as string;
+        session.user.name = token.name as string;
       }
       return session;
     },
