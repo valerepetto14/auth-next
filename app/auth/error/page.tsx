@@ -1,3 +1,4 @@
+"use client";
 import FormWrapper from "@/components/auth/formWrapper";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
