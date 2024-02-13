@@ -8,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <section>
       <nav className="bg-slate-100 h-20 w-full px-10 flex justify-between items-center">
         <h1 className="text-xl font-bold">My App</h1>
         <div className="flex gap-5">
@@ -16,6 +16,6 @@ export default function RootLayout({
         </div>
       </nav>
       {children}
-    </>
+    </section>
   );
 }
