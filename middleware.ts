@@ -11,7 +11,8 @@ export default async function middleware(
 ) {
   const pathname = req.nextUrl.pathname;
   const session = await getToken({ req, secret: process.env.JWT_SECRET });
-
+  console.log("pathname", pathname);
+  console.log("session", session);
   if (publicRoutes.includes(pathname as string)) {
     return;
   } else if (authRoutes.includes(pathname as string)) {
