@@ -24,7 +24,6 @@ const SignUpForm = () => {
       name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
@@ -100,7 +99,7 @@ const SignUpForm = () => {
         <span className="font-semibold text-xs text-red-600">
           {form.formState.errors.password?.message}
         </span>
-        <label className="font-semibold text-sm" htmlFor="">
+        {/* <label className="font-semibold text-sm" htmlFor="">
           Confirm Password
         </label>
         <Input
@@ -120,7 +119,7 @@ const SignUpForm = () => {
         />
         <span className="font-semibold text-xs text-red-600">
           {form.formState.errors.confirmPassword?.message}
-        </span>
+        </span> */}
         <Button
           disabled={isPending}
           type="submit"
