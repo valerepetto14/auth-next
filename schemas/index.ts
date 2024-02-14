@@ -25,4 +25,7 @@ export const SignUpSchema = z.object({
       message: "Password must be at least 8 characters long",
     })
     .max(20),
+  confirmPassword: z.string().refine((data) => data === data, {
+    message: "Passwords do not match",
+  }),
 });

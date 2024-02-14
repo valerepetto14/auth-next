@@ -24,6 +24,7 @@ const SignUpForm = () => {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -93,10 +94,32 @@ const SignUpForm = () => {
           className={clsx({
             "border-red-600": form.formState.errors.password,
             "bg-red-100": form.formState.errors.password,
+            "px-5 py-2 border bg-gray-200 rounded mb-2": true,
           })}
         />
         <span className="font-semibold text-xs text-red-600">
           {form.formState.errors.password?.message}
+        </span>
+        <label className="font-semibold text-sm" htmlFor="">
+          Confirm Password
+        </label>
+        <Input
+          type="password"
+          disabled={isPending}
+          placeholder="Repeat Password"
+          {...(form.register("confirmPassword"),
+          {
+            validate: (value: string) =>
+              value === form.getValues("password") || "Passwords do not match",
+          })}
+          className={clsx({
+            "border-red-600": form.formState.errors.password,
+            "bg-red-100": form.formState.errors.password,
+            "px-5 py-2 border bg-gray-200 rounded mb-2": true,
+          })}
+        />
+        <span className="font-semibold text-xs text-red-600">
+          {form.formState.errors.confirmPassword?.message}
         </span>
         <Button
           disabled={isPending}
