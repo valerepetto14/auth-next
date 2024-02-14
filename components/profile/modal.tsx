@@ -11,6 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ModalProfile = () => {
   const { data: session } = useSession();
@@ -30,8 +31,14 @@ const ModalProfile = () => {
       </SheetTrigger>
       <SheetContent className="flex flex-col justify-between">
         <SheetHeader>
-          <SheetTitle>
-            {session ? `Welcome, ${session.user?.name}` : "Welcome"}
+          <SheetTitle className="flex items-center gap-2">
+            <Avatar>
+              <AvatarImage
+                src={session?.user.image || "https://github.com/shadcn.png"}
+              />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            {session?.user.name || "User"}
           </SheetTitle>
         </SheetHeader>
         <Button onClick={handleSignOut}>Sign Out</Button>
