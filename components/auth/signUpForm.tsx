@@ -41,7 +41,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div>
+    <div className="sm:w-full md:w-1/2 lg:w-1/4 px-12">
       <form
         className="flex flex-col gap-2"
         {...form}
@@ -58,6 +58,7 @@ const SignUpForm = () => {
           className={clsx({
             "border-red-600": form.formState.errors.name,
             "bg-red-100": form.formState.errors.name,
+            "px-5 py-2 border bg-gray-200 rounded mb-2": true,
           })}
         />
         <span className="font-semibold text-xs text-red-600">
@@ -74,6 +75,7 @@ const SignUpForm = () => {
           className={clsx({
             "border-red-600": form.formState.errors.email,
             "bg-red-100": form.formState.errors.email,
+            "px-5 py-2 border bg-gray-200 rounded mb-2": true,
           })}
         />
         <span className="font-semibold text-xs text-red-600">
