@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useTransition, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpSchema } from "@/schemas/index";
@@ -12,11 +12,13 @@ import FormError from "../formMessage/formError";
 import FormSuccess from "../formMessage/formSuccess";
 import { signUp } from "@/actions/auth";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -24,20 +26,26 @@ const SignUpForm = () => {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
     setError(null);
+    setIsPending(true);
     setSuccess(null);
-    signUp(data).then((res) => {
-      if ("error" in res) {
-        setError(res.error as string);
-      }
-      if ("success" in res) {
-        setSuccess(res.success as string);
-      }
-    });
+    signUp(data)
+      .then((res) => {
+        if ("error" in res) {
+          setError(res.error as string);
+        }
+        if ("success" in res) {
+          setSuccess(res.success as string);
+        }
+      })
+      .finally(() => {
+        setIsPending(false);
+      });
   };
 
   return (
@@ -99,27 +107,23 @@ const SignUpForm = () => {
         <span className="font-semibold text-xs text-red-600">
           {form.formState.errors.password?.message}
         </span>
-        {/* <label className="font-semibold text-sm" htmlFor="">
+        <label className="font-semibold text-sm" htmlFor="">
           Confirm Password
         </label>
         <Input
           type="password"
           disabled={isPending}
-          placeholder="Repeat Password"
-          {...(form.register("confirmPassword"),
-          {
-            validate: (value: string) =>
-              value === form.getValues("password") || "Passwords do not match",
-          })}
+          placeholder="Confirm Password"
+          {...form.register("confirmPassword")}
           className={clsx({
-            "border-red-600": form.formState.errors.password,
-            "bg-red-100": form.formState.errors.password,
-            "px-5 py-2 border bg-gray-200 rounded mb-2": true,
+            "border-red-600": form.formState.errors.confirmPassword,
+            "bg-red-100": form.formState.errors.confirmPassword,
+            "px-5 py-2 border bg-gray-200 rounded mb-1": true,
           })}
         />
         <span className="font-semibold text-xs text-red-600">
           {form.formState.errors.confirmPassword?.message}
-        </span> */}
+        </span>
         <Button
           disabled={isPending}
           type="submit"

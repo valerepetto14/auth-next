@@ -7,6 +7,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { data: session } = useSession();
+  console.log("session", session);
   return (
     <section>
       <nav className="bg-slate-100 h-20 w-full px-10 flex justify-between items-center">

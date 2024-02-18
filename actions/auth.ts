@@ -3,6 +3,7 @@ import { SignInSchema, SignUpSchema } from "@/schemas";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { getUserByEmail, createUser } from "@/data/user";
+import { generateVerificationToken } from "@/data/verification-token";
 
 export const signIn = async (body: z.infer<typeof SignInSchema>) => {
   const validateBody = SignInSchema.safeParse(body);
@@ -29,12 +30,15 @@ export const signUp = async (body: z.infer<typeof SignUpSchema>) => {
       error: "User already exists",
     };
   }
-  const user = await createUser({
+  await createUser({
     name,
     email,
     password: hashedPassword,
   });
+
+  const verificationToken = await generateVerificationToken(email);
+
   return {
-    success: "User created",
+    success: "Confirmation email sent!",
   };
 };

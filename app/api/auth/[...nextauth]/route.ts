@@ -72,8 +72,8 @@ const handler = NextAuth({
       return token;
     },
     session: async ({ session, token }) => {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
+      if (token.id && session.user) {
+        session.user.id = token.id as string;
         session.user.role = token.role as string;
         session.user.image = token.image as string;
         session.user.name = token.name as string;

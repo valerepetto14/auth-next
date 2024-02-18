@@ -12,10 +12,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import Image from "next/image";
 const ModalProfile = () => {
   const { data: session } = useSession();
   const router = useRouter();
+
   const handleSignOut = () => {
     signOut({
       redirect: false,
@@ -23,6 +24,8 @@ const ModalProfile = () => {
       router.push("/auth/signin");
     });
   };
+
+  console.log("session", session?.user.image);
 
   return (
     <Sheet>
@@ -33,9 +36,7 @@ const ModalProfile = () => {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <Avatar>
-              <AvatarImage
-                src={session?.user.image || "https://github.com/shadcn.png"}
-              />
+              <AvatarImage src={session?.user.image} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             {session?.user.name || "User"}
