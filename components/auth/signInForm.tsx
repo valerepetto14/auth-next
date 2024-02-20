@@ -15,10 +15,12 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignInForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPending, setIsPending] = useState(false);
 
   const router = useRouter();
@@ -96,21 +98,29 @@ const SignInForm = () => {
         <label className="font-semibold text-sm" htmlFor="">
           Password
         </label>
-        <Input
-          type="password"
-          disabled={isPending}
-          placeholder="Password"
-          {...form.register("password")}
-          className={clsx({
-            "border-red-600": form.formState.errors.password,
-            "bg-red-100": form.formState.errors.password,
-            "px-5 py-2 border bg-gray-200 rounded mb-2": true,
-          })}
-        />
+        <div className="relative">
+          <Input
+            type={isPasswordVisible ? "text" : "password"}
+            disabled={isPending}
+            placeholder="Password"
+            {...form.register("password")}
+            className={clsx({
+              "border-red-600": form.formState.errors.password,
+              "bg-red-100": form.formState.errors.password,
+              "px-5 py-2 border bg-gray-200 rounded mb-2": true,
+            })}
+          />
+          <button
+            type="button"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            className="absolute right-0 top-0 mt-3 mr-4"
+          >
+            {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
         <span className="font-semibold text-xs text-red-600">
           {form.formState.errors.password?.message}
         </span>
-
         <Button
           type="submit"
           disabled={isPending}

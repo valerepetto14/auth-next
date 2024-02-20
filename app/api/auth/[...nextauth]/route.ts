@@ -50,14 +50,12 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    signIn: async ({ user }) => {
-      // const userbd = await getUserById(user.id as string);
-      // console.log("userbd", userbd);
-      // if (!userbd || !userbd.emailVerified) {
-      //   console.log("userbd", userbd);
-      //   return false;
-      // }
-      return true;
+    signIn: async ({ user, account }) => {
+      if (account?.provider !== "credentials") return true;
+      const userbd = await getUserById(user.id as string);
+      if (!userbd) return false;
+      if (userbd.emailVerified) return true;
+      return false;
     },
     jwt: async ({ token, user }) => {
       const userbd = await getUserById(token.sub as string);

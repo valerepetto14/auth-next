@@ -13,12 +13,14 @@ import FormSuccess from "../formMessage/formSuccess";
 import { signUp } from "@/actions/auth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUpForm = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -36,12 +38,8 @@ const SignUpForm = () => {
     setSuccess(null);
     signUp(data)
       .then((res) => {
-        if ("error" in res) {
-          setError(res.error as string);
-        }
-        if ("success" in res) {
-          setSuccess(res.success as string);
-        }
+        setError(res.error as string);
+        setSuccess(res.success as string);
       })
       .finally(() => {
         setIsPending(false);
@@ -93,17 +91,26 @@ const SignUpForm = () => {
         <label className="font-semibold text-sm" htmlFor="">
           Password
         </label>
-        <Input
-          type="password"
-          disabled={isPending}
-          placeholder="Password"
-          {...form.register("password")}
-          className={clsx({
-            "border-red-600": form.formState.errors.password,
-            "bg-red-100": form.formState.errors.password,
-            "px-5 py-2 border bg-gray-200 rounded mb-2": true,
-          })}
-        />
+        <div className="relative">
+          <Input
+            type={isPasswordVisible ? "text" : "password"}
+            disabled={isPending}
+            placeholder="Password"
+            {...form.register("password")}
+            className={clsx({
+              "border-red-600": form.formState.errors.password,
+              "bg-red-100": form.formState.errors.password,
+              "px-5 py-2 border bg-gray-200 rounded mb-2": true,
+            })}
+          />
+          <button
+            type="button"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            className="absolute right-0 top-0 mt-3 mr-4"
+          >
+            {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
         <span className="font-semibold text-xs text-red-600">
           {form.formState.errors.password?.message}
         </span>

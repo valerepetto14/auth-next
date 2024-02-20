@@ -28,25 +28,30 @@ export const getVerificationTokenByEmail = async (email: string) => {
 };
 
 export const generateVerificationToken = async (email: string) => {
-  const token = uuidv4();
-  const expires = new Date(new Date().getTime() + 3600 * 1000);
-  const existingToken = await getVerificationTokenByEmail(email);
+  try {
+    const token = uuidv4();
+    const expires = new Date(new Date().getTime() + 3600 * 1000);
+    const existingToken = await getVerificationTokenByEmail(email);
 
-  if (existingToken) {
-    await db.verificationToken.delete({
-      where: {
-        id: existingToken.id,
+    if (existingToken) {
+      await db.verificationToken.delete({
+        where: {
+          id: existingToken.id,
+        },
+      });
+    }
+
+    const verificationToken = await db.verificationToken.create({
+      data: {
+        token,
+        email,
+        expires,
       },
     });
+
+    return verificationToken;
+    
+  } catch (error) {
+    return null;
   }
-
-  const verificationToken = await db.verificationToken.create({
-    data: {
-      token,
-      email,
-      expires,
-    },
-  });
-
-  return verificationToken;
 };
